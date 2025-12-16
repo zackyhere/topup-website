@@ -22,9 +22,10 @@ app.use(express.urlencoded({ extended: true }));
 // ROUTES
 // Dashboard
 app.get("/", async (req, res) => {
+    const page_title = "Dashboard";
     const config = configg;
     const product = await digiFlazz.getProducts();
-    res.render("pages/dashboard", { config, product });
+    res.render("pages/dashboard", { config, product, page_title });
 });
 
 // Invoice (spesifik - harus sebelum /:product)

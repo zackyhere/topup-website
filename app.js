@@ -1,8 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const digiFlazz = require("./src/services/digiflazz");
 
 const app = express();
+
+const configg = require("./config.json");
+
 
 // Set EJS
 app.set("view engine", "ejs");
@@ -17,8 +21,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // ROUTES
 // Dashboard
-app.get("/", (req, res) => {
-    res.render("pages/dashboard");
+app.get("/", async (req, res) => {
+    const config = configg;
+    const product = await digiFlazz.getProducts();
+    res.render("pages/dashboard", { config, product });
 });
 
 // Invoice (spesifik - harus sebelum /:product)

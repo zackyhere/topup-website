@@ -1,4 +1,173 @@
 <%- include("../partials/header.ejs") %>
-    <div>dashboard</div>
+    <main
+        class="min-h-screen w-full bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100 transition-colors duration-300 pb-20">
 
+        <section class="w-full flex justify-center py-6">
+            <div class="relative w-[90vw] overflow-hidden rounded-xl shadow-lg group">
+
+                <div id="slider-track"
+                    class="flex transition-transform duration-700 ease-in-out cursor-grab active:cursor-grabbing">
+                    <% config.slide.forEach((imgUrl, index)=> { %>
+                        <div class="min-w-full flex justify-center items-center bg-gray-200 dark:bg-gray-800">
+                            <img src="<%= imgUrl %>" alt="Slide <%= index + 1 %>"
+                                class="w-full h-auto block select-none pointer-events-none" loading="lazy">
+                        </div>
+                        <% }); %>
+                </div>
+
+                <% if (config.slide.length> 1) { %>
+                    <button id="prevBtn"
+                        class="hidden lg:block absolute top-1/2 left-4 -translate-y-1/2 p-2 rounded-full bg-black/30 hover:bg-black/60 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
+
+                    <button id="nextBtn"
+                        class="hidden lg:block absolute top-1/2 right-4 -translate-y-1/2 p-2 rounded-full bg-black/30 hover:bg-black/60 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+                    <% } %>
+
+                        <div class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2 z-10">
+                            <% config.slide.forEach((_, index)=> { %>
+                                <button
+                                    class="w-2 h-2 rounded-full bg-white/50 hover:bg-white transition-all slider-dot"
+                                    onclick="goToSlide(<%= index %>)"></button>
+                                <% }); %>
+                        </div>
+            </div>
+        </section>
+
+        <section class="w-[90vw] mx-auto mt-4">
+            <h2 class="text-xl font-bold mb-4 px-2 border-l-4 border-blue-500">Daftar Produk</h2>
+
+            <div class="grid grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-6">
+
+                <% product.forEach((item)=> { %>
+                    <a href="/product/<%= item.produk.toLowerCase().replace(/\s/g, '') %>"
+                        class="group relative block overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow bg-white dark:bg-gray-900">
+
+                        <div class="w-full aspect-[3/4] overflow-hidden relative">
+                            <img src="<%= item.img %>" alt="<%= item.produk %>"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+
+                            <div
+                                class="absolute bottom-0 left-0 w-full transform translate-y-0 lg:translate-y-full lg:group-hover:translate-y-0 transition-transform duration-300 ease-out z-20">
+
+                                <div
+                                    class="w-full pt-6 pb-2 px-2 bg-gradient-to-t from-black/90 via-black/50 to-transparent backdrop-blur-[2px]">
+                                    <h3
+                                        class="text-white font-semibold text-[10px] lg:text-sm text-center truncate drop-shadow-md">
+                                        <%= item.produk %>
+                                    </h3>
+                                </div>
+
+                            </div>
+                        </div>
+                    </a>
+                    <% }); %>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // === LOGIKA SLIDER & SWIPE ===
+        let currentIndex = 0;
+        let autoSlideInterval;
+        const slideCount = Number('<%= config.slide.length %>');
+        const track = document.getElementById('slider-track');
+        const dots = document.querySelectorAll('.slider-dot');
+
+        // Variabel untuk Swipe
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        const updateSlide = (index) => {
+            track.style.transform = `translateX(-${index * 100}%)`;
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.add('bg-white', 'scale-125');
+                    dot.classList.remove('bg-white/50');
+                } else {
+                    dot.classList.remove('bg-white', 'scale-125');
+                    dot.classList.add('bg-white/50');
+                }
+            });
+        };
+
+        const nextSlide = () => {
+            currentIndex = (currentIndex + 1) % slideCount;
+            updateSlide(currentIndex);
+        };
+
+        const prevSlide = () => {
+            currentIndex = (currentIndex - 1 + slideCount) % slideCount;
+            updateSlide(currentIndex);
+        };
+
+        window.goToSlide = (index) => {
+            currentIndex = index;
+            updateSlide(currentIndex);
+            resetAutoSlide();
+        };
+
+        const resetAutoSlide = () => {
+            clearInterval(autoSlideInterval);
+            if (slideCount > 1) autoSlideInterval = setInterval(nextSlide, 5000);
+        };
+
+        // Fungsi Deteksi Swipe
+        const handleSwipe = () => {
+            const swipeThreshold = 50; // Jarak minimal geser untuk dianggap swipe
+            if (touchStartX - touchEndX > swipeThreshold) {
+                // Swipe Kiri (Next)
+                nextSlide();
+                resetAutoSlide();
+            }
+            if (touchEndX - touchStartX > swipeThreshold) {
+                // Swipe Kanan (Prev)
+                prevSlide();
+                resetAutoSlide();
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (slideCount > 0) updateSlide(0);
+
+            if (slideCount > 1) {
+                autoSlideInterval = setInterval(nextSlide, 5000);
+
+                const btnPrev = document.getElementById('prevBtn');
+                const btnNext = document.getElementById('nextBtn');
+                const sliderWrapper = track.parentElement;
+
+                // Event Listener Tombol (Desktop)
+                if (btnPrev && btnNext) {
+                    btnNext.addEventListener('click', () => { nextSlide(); resetAutoSlide(); });
+                    btnPrev.addEventListener('click', () => { prevSlide(); resetAutoSlide(); });
+                }
+
+                // Event Listener Swipe (Mobile Touch)
+                track.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+
+                track.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                }, { passive: true });
+
+                // Pause Hover
+                sliderWrapper.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+                sliderWrapper.addEventListener('mouseleave', () => resetAutoSlide());
+            }
+        });
+    </script>
     <%- include("../partials/footer.ejs") %>

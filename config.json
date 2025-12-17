@@ -15,11 +15,16 @@
     "required_form": [
         {
             "game": "mobile_legends",
-            "need": 2
+            "need": [
+                "username",
+                "id"
+            ]
         },
         {
             "game": "freefire",
-            "need": 1
+            "need": [
+                "username"
+            ]
         }
     ]
 }

@@ -26,11 +26,18 @@ async function getProductList(product, required_form) {
             }
         },
 
-        required_form: 2,
+        required_form: [
+            "username",
+            "id"
+        ],
 
         payment_admin: {
             rekomendasi: {
                 qris: {
+                    admin: "1500",
+                    svg: "<svg></svg>"
+                },
+                gopay: {
                     admin: "1500",
                     svg: "<svg></svg>"
                 }

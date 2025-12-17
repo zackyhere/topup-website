@@ -3,40 +3,38 @@
     <main
         class="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 pb-40 font-sans transition-colors duration-300">
 
-        <section class="relative w-full bg-gray-200 dark:bg-gray-800 mb-16">
-            <div class="w-full h-48 md:h-64 lg:h-80 overflow-hidden">
+        <section class="w-full mb-8">
+            <div class="w-full h-40 md:h-56 lg:h-72 overflow-hidden bg-gray-300 dark:bg-gray-800">
                 <img src="<%= productData.information.banner_img %>" alt="Banner" class="w-full h-full object-cover">
             </div>
 
-            <div class="absolute bottom-0 left-4 translate-y-1/2 flex items-end gap-4 w-[calc(100%-2rem)]">
+            <div class="px-4 max-w-4xl mx-auto flex items-end gap-4 -mt-12 relative z-10">
+
                 <div
-                    class="relative w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-4 border-white dark:border-gray-950 shadow-lg shrink-0">
+                    class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-4 border-gray-50 dark:border-gray-950 shadow-lg shrink-0 bg-gray-50 dark:bg-gray-950">
                     <img src="<%= productData.information.app_img %>" alt="App Icon" class="w-full h-full object-cover">
                 </div>
 
-                <div class="pb-1 md:pb-2 flex flex-col justify-end h-24 md:h-32 mb-[-3.5rem] md:mb-[-4rem] ml-2">
-                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white drop-shadow-sm mb-2">
+                <div class="flex flex-col justify-end pb-1 md:pb-2">
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-1 leading-tight">
                         <%= productData.information.brand %>
                     </h1>
 
-                    <% if (productData.information.additions && Array.isArray(productData.information.additions)) { %>
-                        <div class="flex flex-col gap-1">
-                            <% productData.information.additions.forEach(add=> { %>
-                                <div
-                                    class="flex items-center gap-2 text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">
-                                    <img src="<%= add.logo %>" alt="icon" class="w-4 h-4 object-contain">
-                                    <span>
-                                        <%= add.teks %>
-                                    </span>
-                                </div>
-                                <% }) %>
+                    <% if (productData.information.additions && productData.information.additions.logo) { %>
+                        <div
+                            class="flex items-center gap-2 text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">
+                            <img src="<%= productData.information.additions.logo %>" alt="icon"
+                                class="w-4 h-4 object-contain">
+                            <span>
+                                <%= productData.information.additions.teks %>
+                            </span>
                         </div>
                         <% } %>
                 </div>
             </div>
         </section>
 
-        <div class="px-4 max-w-4xl mx-auto space-y-8 mt-20">
+        <div class="px-4 max-w-4xl mx-auto space-y-8">
 
             <section
                 class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
@@ -45,16 +43,20 @@
                         class="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
                     Masukan Data Akun
                 </h2>
-                <div class="grid <%= productData.required_form === 1 ? 'grid-cols-1' : 'grid-cols-2' %> gap-4">
-                    <% for(let i=1; i <=productData.required_form; i++) { %>
-                        <div class="<%= productData.required_form === 1 ? 'w-[90%] mx-auto' : 'w-full' %>">
-                            <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Input <%= i
-                                    %></label>
+
+                <div class="grid <%= productData.required_form.length === 1 ? 'grid-cols-1' : 'grid-cols-2' %> gap-4">
+                    <% productData.required_form.forEach((label, index)=> { %>
+                        <div
+                            class="<%= productData.required_form.length === 1 ? 'w-full md:w-[90%] md:mx-auto' : 'w-full' %>">
+                            <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400 capitalize">
+                                <%= label %>
+                            </label>
                             <input type="text"
                                 class="form-input w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder-gray-400 dark:placeholder-gray-600"
-                                placeholder="Masukan data..." oninput="updateOrderData('form<%= i %>', this.value)">
+                                placeholder="Masukan <%= label %>..."
+                                oninput="updateOrderData('form<%= index + 1 %>', this.value)">
                         </div>
-                        <% } %>
+                        <% }) %>
                 </div>
             </section>
 
@@ -66,7 +68,7 @@
                     Pilih Nominal
                 </h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <% productData.product.forEach((item, index)=> { %>
+                    <% productData.product.forEach((item)=> { %>
                         <div class="product-card group relative cursor-pointer bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 rounded-xl p-4 transition-all duration-200"
                             onclick="selectProduct(this, '<%= item.name %>', <%= item.price %>)">
                             <div class="flex flex-col h-full justify-between">
@@ -75,11 +77,11 @@
                                     <%= item.name %>
                                 </span>
                                 <div class="flex items-center gap-2 mt-3">
-                                    <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg class="w-5 h-5 text-blue-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                         <path
                                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" />
                                     </svg>
-                                    <span class="text-sm text-gray-500 dark:text-gray-400">Rp <%=
+                                    <span class="text-sm text-gray-500 dark:text-gray-400 font-mono">Rp <%=
                                             item.price.toLocaleString('id-ID') %></span>
                                 </div>
                             </div>
@@ -94,8 +96,8 @@
                 </div>
             </section>
 
-            <section
-                class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+            <section id="payment-section"
+                class="hidden bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 transition-all duration-500 ease-in-out">
                 <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
                     <span
                         class="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
@@ -110,7 +112,7 @@
                                     data-admin="<%= rekData[key].admin %>"
                                     data-name="<%= key.toUpperCase() %> (Rekomendasi)" onclick="selectPayment(this)">
                                     <div
-                                        class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] px-2 py-1 rounded-bl-lg rounded-tr-lg font-bold">
+                                        class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] px-2 py-1 rounded-bl-lg rounded-tr-lg font-bold tracking-wider">
                                         REKOMENDASI</div>
                                     <div class="flex flex-col items-start gap-2">
                                         <span class="font-bold text-gray-800 dark:text-gray-100 uppercase">
@@ -202,7 +204,7 @@
                 <div class="space-y-3">
                     <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">No. WhatsApp</label>
                     <input type="number"
-                        class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder-gray-400 dark:placeholder-gray-600"
                         placeholder="08xxxxxxxxxx" oninput="updateOrderData('contact', this.value)">
                     <p class="text-xs text-gray-500 dark:text-gray-500">Bukti pembayaran dan status pesanan akan dikirim
                         ke nomor ini.</p>
@@ -212,24 +214,26 @@
         </div>
 
         <div id="sticky-bar"
-            class="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-4 shadow-2xl transform translate-y-full transition-transform duration-300 z-50">
+            class="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] transform translate-y-full transition-transform duration-300 z-50">
             <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
-                    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg text-blue-600 dark:text-blue-300">
+                    <div
+                        class="hidden md:block p-2 bg-blue-100 dark:bg-blue-900 rounded-lg text-blue-600 dark:text-blue-300">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path
                                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" />
                         </svg>
                     </div>
                     <div class="flex flex-col">
-                        <span id="summary-product" class="text-sm text-gray-500 dark:text-gray-400 font-medium">Pilih
+                        <span id="summary-product"
+                            class="text-sm text-gray-500 dark:text-gray-400 font-medium truncate max-w-[150px]">Pilih
                             Item</span>
                         <span id="summary-price" class="text-lg font-bold text-blue-600 dark:text-blue-400">Rp 0</span>
                     </div>
                 </div>
 
                 <button onclick="triggerCreateInvoice()"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-500/30 transition-all active:scale-95">
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-500/30 transition-all active:scale-95 text-sm md:text-base">
                     Pesan Sekarang
                 </button>
             </div>
@@ -238,59 +242,58 @@
     </main>
 
     <script>
-        // Initial Order Data
         let orderData = {
             product: null,
             price: 0,
             payment: null,
             payment_amount: 0,
             contact: null,
-            // Forms will be added dynamically (form1, form2...)
+            // form1, form2 will be added dynamically
         };
 
-        const requiredForms = <%= productData.required_form %>;
+        // Mengambil jumlah form dari panjang array
+        const requiredFormsCount = <%= productData.required_form.length %>;
         let currentBasePrice = 0;
         let currentAdminFee = 0;
 
-        // --- Functions ---
-
-        // 1. Update Input Fields (Game ID, Contact)
         function updateOrderData(key, value) {
             orderData[key] = value;
             checkValidation();
         }
 
-        // 2. Select Product
         function selectProduct(el, name, price) {
-            // UI Reset
+            // 1. Highlight Product
             document.querySelectorAll('.product-card').forEach(card => {
                 card.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
                 card.classList.add('border-gray-200', 'dark:border-gray-700');
                 card.querySelector('.check-icon').style.opacity = '0';
             });
 
-            // UI Active
             el.classList.remove('border-gray-200', 'dark:border-gray-700');
             el.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
             el.querySelector('.check-icon').style.opacity = '1';
 
-            // Logic
+            // 2. Logic Update
             orderData.product = name;
             orderData.price = price;
             currentBasePrice = price;
+
+            // 3. Modifikasi: Tampilkan Section Payment
+            const paymentSection = document.getElementById('payment-section');
+            paymentSection.classList.remove('hidden');
+            // Scroll halus ke payment section (optional UX improvement)
+            setTimeout(() => {
+                paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
 
             updatePaymentPrices();
             updateSummary();
             checkValidation();
         }
 
-        // 3. Toggle Payment Accordion
         function toggleAccordion(category) {
             const content = document.getElementById(`content-${category}`);
             const arrow = document.getElementById(`btn-arrow-${category}`);
-
-            // Close others if needed (Optional: to mimic distinct accordion)
-            // Here strictly following prompt: "jika tombol panah di pencet maka akan memanjangkan height"
 
             if (content.classList.contains('hidden')) {
                 content.classList.remove('hidden');
@@ -301,23 +304,13 @@
             }
         }
 
-        // 4. Select Payment Method
         function selectPayment(el) {
-            if (currentBasePrice === 0) {
-                alert("Silakan pilih produk terlebih dahulu.");
-                return;
-            }
-
-            // UI Reset
+            // Reset Style
             document.querySelectorAll('.payment-card').forEach(card => {
                 card.classList.remove('border-blue-600', 'ring-2', 'ring-blue-400');
-                // Special check for Rekomendasi styling persistence
-                if (!card.querySelector('.absolute.top-0')) {
-                    // logic to reset non-recommendation cards specific styles if needed
-                }
             });
 
-            // UI Active
+            // Active Style
             el.classList.add('border-blue-600', 'ring-2', 'ring-blue-400');
 
             // Logic
@@ -332,24 +325,20 @@
             checkValidation();
         }
 
-        // 5. Update Payment Display Prices (Product Price + Admin)
         function updatePaymentPrices() {
-            const displays = document.querySelectorAll('.price-display');
             const cards = document.querySelectorAll('.payment-card');
-
             cards.forEach(card => {
                 const admin = parseInt(card.getAttribute('data-admin'));
                 const total = currentBasePrice + admin;
                 const display = card.querySelector('.price-display');
 
-                // Update text
                 if (currentBasePrice > 0) {
                     display.innerText = "Rp " + total.toLocaleString('id-ID');
                 } else {
                     display.innerText = "Rp -";
                 }
 
-                // If this card was already selected, update orderData total
+                // Jika kartu ini sedang dipilih, update total orderData juga
                 if (card.classList.contains('ring-2')) {
                     orderData.payment_amount = total;
                     updateSummary();
@@ -357,14 +346,11 @@
             });
         }
 
-        // 6. Update Sticky Summary Bar
         function updateSummary() {
             const sumProduct = document.getElementById('summary-product');
             const sumPrice = document.getElementById('summary-price');
 
-            if (orderData.product) {
-                sumProduct.innerText = orderData.product;
-            }
+            if (orderData.product) sumProduct.innerText = orderData.product;
 
             if (orderData.payment_amount > 0) {
                 sumPrice.innerText = "Rp " + orderData.payment_amount.toLocaleString('id-ID');
@@ -373,34 +359,26 @@
             }
         }
 
-        // 7. Validation & Show Bottom Bar
         function checkValidation() {
             let formsFilled = true;
-            for (let i = 1; i <= requiredForms; i++) {
+            for (let i = 1; i <= requiredFormsCount; i++) {
                 if (!orderData['form' + i] || orderData['form' + i] === '') formsFilled = false;
             }
 
-            if (
-                orderData.product &&
-                orderData.payment &&
-                orderData.contact &&
-                formsFilled
-            ) {
+            if (orderData.product && orderData.payment && orderData.contact && formsFilled) {
                 document.getElementById('sticky-bar').classList.remove('translate-y-full');
             } else {
                 document.getElementById('sticky-bar').classList.add('translate-y-full');
             }
         }
 
-        // 8. Submit
         async function triggerCreateInvoice() {
             await createInvoice(orderData);
         }
 
         async function createInvoice(data) {
-            console.log("Creating Invoice with Data:", data);
-            alert("Pesanan dibuat! Cek Console.");
-            // Add Fetch/Axios logic here
+            console.log("Order Data:", data);
+            alert("Cek Console untuk data JSON");
         }
     </script>
 

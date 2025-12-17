@@ -5,7 +5,7 @@ const digiFlazz = require("./src/services/digiflazz");
 
 const app = express();
 
-const configg = require("./config.json");
+const getConfig = require("./config.json");
 
 
 // Set EJS
@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 // Dashboard
 app.get("/", async (req, res) => {
     const page_title = "Dashboard";
-    const config = configg;
+    const config = getConfig;
     const product = await digiFlazz.getProducts();
     res.render("pages/dashboard", { config, product, page_title });
 });
@@ -31,13 +31,18 @@ app.get("/", async (req, res) => {
 // Invoice (spesifik - harus sebelum /:product)
 app.get("/invoice/:id", (req, res) => {
     const { id } = req.params;
-    res.render("pages/invoice", { id });
+    const page_title = "Invoice";
+    const config = getConfig;
+    res.render("pages/invoice", { id, page_title, config });
 });
 
 // Product (dynamic - catch-all, harus terakhir)
-app.get("/:product", (req, res) => {
+app.get("/product/:product", async (req, res) => {
     const { product } = req.params;
-    res.render("pages/product", { product });
+    const page_title = "Product";
+    const config = getConfig;
+    const productData = await digiFlazz.getProductList(product, config.required_form);
+    res.render("pages/product", { productData, page_title, config });
 });
 
 module.exports = app;

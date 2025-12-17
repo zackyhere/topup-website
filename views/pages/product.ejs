@@ -1,0 +1,407 @@
+<%- include('../partials/header') %>
+
+    <main
+        class="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 pb-40 font-sans transition-colors duration-300">
+
+        <section class="relative w-full bg-gray-200 dark:bg-gray-800 mb-16">
+            <div class="w-full h-48 md:h-64 lg:h-80 overflow-hidden">
+                <img src="<%= productData.information.banner_img %>" alt="Banner" class="w-full h-full object-cover">
+            </div>
+
+            <div class="absolute bottom-0 left-4 translate-y-1/2 flex items-end gap-4 w-[calc(100%-2rem)]">
+                <div
+                    class="relative w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-4 border-white dark:border-gray-950 shadow-lg shrink-0">
+                    <img src="<%= productData.information.app_img %>" alt="App Icon" class="w-full h-full object-cover">
+                </div>
+
+                <div class="pb-1 md:pb-2 flex flex-col justify-end h-24 md:h-32 mb-[-3.5rem] md:mb-[-4rem] ml-2">
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white drop-shadow-sm mb-2">
+                        <%= productData.information.brand %>
+                    </h1>
+
+                    <% if (productData.information.additions && Array.isArray(productData.information.additions)) { %>
+                        <div class="flex flex-col gap-1">
+                            <% productData.information.additions.forEach(add=> { %>
+                                <div
+                                    class="flex items-center gap-2 text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">
+                                    <img src="<%= add.logo %>" alt="icon" class="w-4 h-4 object-contain">
+                                    <span>
+                                        <%= add.teks %>
+                                    </span>
+                                </div>
+                                <% }) %>
+                        </div>
+                        <% } %>
+                </div>
+            </div>
+        </section>
+
+        <div class="px-4 max-w-4xl mx-auto space-y-8 mt-20">
+
+            <section
+                class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <span
+                        class="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                    Masukan Data Akun
+                </h2>
+                <div class="grid <%= productData.required_form === 1 ? 'grid-cols-1' : 'grid-cols-2' %> gap-4">
+                    <% for(let i=1; i <=productData.required_form; i++) { %>
+                        <div class="<%= productData.required_form === 1 ? 'w-[90%] mx-auto' : 'w-full' %>">
+                            <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400">Input <%= i
+                                    %></label>
+                            <input type="text"
+                                class="form-input w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder-gray-400 dark:placeholder-gray-600"
+                                placeholder="Masukan data..." oninput="updateOrderData('form<%= i %>', this.value)">
+                        </div>
+                        <% } %>
+                </div>
+            </section>
+
+            <section
+                class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <span
+                        class="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                    Pilih Nominal
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <% productData.product.forEach((item, index)=> { %>
+                        <div class="product-card group relative cursor-pointer bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 rounded-xl p-4 transition-all duration-200"
+                            onclick="selectProduct(this, '<%= item.name %>', <%= item.price %>)">
+                            <div class="flex flex-col h-full justify-between">
+                                <span
+                                    class="text-sm font-semibold text-gray-700 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                                    <%= item.name %>
+                                </span>
+                                <div class="flex items-center gap-2 mt-3">
+                                    <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" />
+                                    </svg>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">Rp <%=
+                                            item.price.toLocaleString('id-ID') %></span>
+                                </div>
+                            </div>
+                            <div class="absolute top-2 right-2 opacity-0 check-icon text-blue-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+            </section>
+
+            <section
+                class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <span
+                        class="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
+                    Pilih Pembayaran
+                </h2>
+                <div class="flex flex-col gap-4">
+
+                    <% if(productData.payment_admin.rekomendasi) { %>
+                        <% const rekData=productData.payment_admin.rekomendasi; %>
+                            <% Object.keys(rekData).forEach(key=> { %>
+                                <div class="payment-card cursor-pointer relative bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 hover:border-blue-500 rounded-xl p-4 w-[95%] mx-auto transition-all"
+                                    data-admin="<%= rekData[key].admin %>"
+                                    data-name="<%= key.toUpperCase() %> (Rekomendasi)" onclick="selectPayment(this)">
+                                    <div
+                                        class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] px-2 py-1 rounded-bl-lg rounded-tr-lg font-bold">
+                                        REKOMENDASI</div>
+                                    <div class="flex flex-col items-start gap-2">
+                                        <span class="font-bold text-gray-800 dark:text-gray-100 uppercase">
+                                            <%= key %>
+                                        </span>
+                                        <div class="h-8 w-auto fill-current text-gray-700 dark:text-gray-300">
+                                            <%- rekData[key].svg %>
+                                        </div>
+                                        <div
+                                            class="w-full text-center mt-2 border-t border-gray-200 dark:border-gray-700 pt-2">
+                                            <span
+                                                class="price-display text-lg font-bold text-blue-600 dark:text-blue-400">Rp
+                                                -</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }) %>
+                                    <% } %>
+
+                                        <% Object.keys(productData.payment_admin).forEach(category=> { %>
+                                            <% if (category !=='rekomendasi' ) { %>
+                                                <div
+                                                    class="w-[95%] mx-auto bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                                                    <div class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
+                                                        onclick="toggleAccordion('<%= category %>')">
+                                                        <div>
+                                                            <h3
+                                                                class="font-bold text-gray-800 dark:text-gray-100 capitalize">
+                                                                <%= category.replace('_', ' ' ) %>
+                                                            </h3>
+                                                            <div class="flex gap-2 mt-1 opacity-60">
+                                                                <%
+                                                                    Object.keys(productData.payment_admin[category]).forEach(method=>
+                                                                    { %>
+                                                                    <div class="h-4 w-4 overflow-hidden"><%-
+                                                                            productData.payment_admin[category][method].svg
+                                                                            %></div>
+                                                                    <% }) %>
+                                                            </div>
+                                                        </div>
+                                                        <button id="btn-arrow-<%= category %>"
+                                                            class="transform transition-transform duration-300 text-gray-500">
+                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+
+                                                    <div id="content-<%= category %>"
+                                                        class="hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
+                                                        <div class="grid grid-cols-2 gap-3">
+                                                            <%
+                                                                Object.keys(productData.payment_admin[category]).forEach(method=>
+                                                                { %>
+                                                                <div class="payment-card cursor-pointer bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-500 rounded-lg p-3 transition-all flex flex-col items-center justify-center gap-2 text-center"
+                                                                    data-admin="<%= productData.payment_admin[category][method].admin %>"
+                                                                    data-name="<%= method.toUpperCase() %>"
+                                                                    onclick="selectPayment(this)">
+                                                                    <span
+                                                                        class="text-xs font-bold uppercase text-gray-600 dark:text-gray-400">
+                                                                        <%= method %>
+                                                                    </span>
+                                                                    <div class="h-6 w-auto"><%-
+                                                                            productData.payment_admin[category][method].svg
+                                                                            %></div>
+                                                                    <span
+                                                                        class="price-display text-sm font-semibold text-gray-800 dark:text-gray-200">Rp
+                                                                        -</span>
+                                                                </div>
+                                                                <% }) %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                                                    <% }) %>
+
+                </div>
+            </section>
+
+            <section
+                class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <span
+                        class="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">4</span>
+                    Detail Kontak
+                </h2>
+                <div class="space-y-3">
+                    <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">No. WhatsApp</label>
+                    <input type="number"
+                        class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="08xxxxxxxxxx" oninput="updateOrderData('contact', this.value)">
+                    <p class="text-xs text-gray-500 dark:text-gray-500">Bukti pembayaran dan status pesanan akan dikirim
+                        ke nomor ini.</p>
+                </div>
+            </section>
+
+        </div>
+
+        <div id="sticky-bar"
+            class="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-4 shadow-2xl transform translate-y-full transition-transform duration-300 z-50">
+            <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg text-blue-600 dark:text-blue-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <span id="summary-product" class="text-sm text-gray-500 dark:text-gray-400 font-medium">Pilih
+                            Item</span>
+                        <span id="summary-price" class="text-lg font-bold text-blue-600 dark:text-blue-400">Rp 0</span>
+                    </div>
+                </div>
+
+                <button onclick="triggerCreateInvoice()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-500/30 transition-all active:scale-95">
+                    Pesan Sekarang
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Initial Order Data
+        let orderData = {
+            product: null,
+            price: 0,
+            payment: null,
+            payment_amount: 0,
+            contact: null,
+            // Forms will be added dynamically (form1, form2...)
+        };
+
+        const requiredForms = <%= productData.required_form %>;
+        let currentBasePrice = 0;
+        let currentAdminFee = 0;
+
+        // --- Functions ---
+
+        // 1. Update Input Fields (Game ID, Contact)
+        function updateOrderData(key, value) {
+            orderData[key] = value;
+            checkValidation();
+        }
+
+        // 2. Select Product
+        function selectProduct(el, name, price) {
+            // UI Reset
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+                card.classList.add('border-gray-200', 'dark:border-gray-700');
+                card.querySelector('.check-icon').style.opacity = '0';
+            });
+
+            // UI Active
+            el.classList.remove('border-gray-200', 'dark:border-gray-700');
+            el.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+            el.querySelector('.check-icon').style.opacity = '1';
+
+            // Logic
+            orderData.product = name;
+            orderData.price = price;
+            currentBasePrice = price;
+
+            updatePaymentPrices();
+            updateSummary();
+            checkValidation();
+        }
+
+        // 3. Toggle Payment Accordion
+        function toggleAccordion(category) {
+            const content = document.getElementById(`content-${category}`);
+            const arrow = document.getElementById(`btn-arrow-${category}`);
+
+            // Close others if needed (Optional: to mimic distinct accordion)
+            // Here strictly following prompt: "jika tombol panah di pencet maka akan memanjangkan height"
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                arrow.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            }
+        }
+
+        // 4. Select Payment Method
+        function selectPayment(el) {
+            if (currentBasePrice === 0) {
+                alert("Silakan pilih produk terlebih dahulu.");
+                return;
+            }
+
+            // UI Reset
+            document.querySelectorAll('.payment-card').forEach(card => {
+                card.classList.remove('border-blue-600', 'ring-2', 'ring-blue-400');
+                // Special check for Rekomendasi styling persistence
+                if (!card.querySelector('.absolute.top-0')) {
+                    // logic to reset non-recommendation cards specific styles if needed
+                }
+            });
+
+            // UI Active
+            el.classList.add('border-blue-600', 'ring-2', 'ring-blue-400');
+
+            // Logic
+            const admin = parseInt(el.getAttribute('data-admin'));
+            const name = el.getAttribute('data-name');
+
+            currentAdminFee = admin;
+            orderData.payment = name;
+            orderData.payment_amount = currentBasePrice + admin;
+
+            updateSummary();
+            checkValidation();
+        }
+
+        // 5. Update Payment Display Prices (Product Price + Admin)
+        function updatePaymentPrices() {
+            const displays = document.querySelectorAll('.price-display');
+            const cards = document.querySelectorAll('.payment-card');
+
+            cards.forEach(card => {
+                const admin = parseInt(card.getAttribute('data-admin'));
+                const total = currentBasePrice + admin;
+                const display = card.querySelector('.price-display');
+
+                // Update text
+                if (currentBasePrice > 0) {
+                    display.innerText = "Rp " + total.toLocaleString('id-ID');
+                } else {
+                    display.innerText = "Rp -";
+                }
+
+                // If this card was already selected, update orderData total
+                if (card.classList.contains('ring-2')) {
+                    orderData.payment_amount = total;
+                    updateSummary();
+                }
+            });
+        }
+
+        // 6. Update Sticky Summary Bar
+        function updateSummary() {
+            const sumProduct = document.getElementById('summary-product');
+            const sumPrice = document.getElementById('summary-price');
+
+            if (orderData.product) {
+                sumProduct.innerText = orderData.product;
+            }
+
+            if (orderData.payment_amount > 0) {
+                sumPrice.innerText = "Rp " + orderData.payment_amount.toLocaleString('id-ID');
+            } else if (orderData.price > 0) {
+                sumPrice.innerText = "Rp " + orderData.price.toLocaleString('id-ID');
+            }
+        }
+
+        // 7. Validation & Show Bottom Bar
+        function checkValidation() {
+            let formsFilled = true;
+            for (let i = 1; i <= requiredForms; i++) {
+                if (!orderData['form' + i] || orderData['form' + i] === '') formsFilled = false;
+            }
+
+            if (
+                orderData.product &&
+                orderData.payment &&
+                orderData.contact &&
+                formsFilled
+            ) {
+                document.getElementById('sticky-bar').classList.remove('translate-y-full');
+            } else {
+                document.getElementById('sticky-bar').classList.add('translate-y-full');
+            }
+        }
+
+        // 8. Submit
+        async function triggerCreateInvoice() {
+            await createInvoice(orderData);
+        }
+
+        async function createInvoice(data) {
+            console.log("Creating Invoice with Data:", data);
+            alert("Pesanan dibuat! Cek Console.");
+            // Add Fetch/Axios logic here
+        }
+    </script>
+
+    <%- include('../partials/footer') %>

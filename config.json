@@ -11,5 +11,15 @@
     "slide": [
         "https://akmweb.youngjoygame.com/web/gms/image/694619ac9a3170bdeb9bc672ee1f8fc2.jpg",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQljkiZIxYNBfQ6mlvHKZEuepQjCmJNyLnJTQ&s"
+    ],
+    "required_form": [
+        {
+            "game": "mobile_legends",
+            "need": 2
+        },
+        {
+            "game": "freefire",
+            "need": 1
+        }
     ]
 }

@@ -3,27 +3,28 @@
     <main
         class="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-100 pb-40 font-sans transition-colors duration-300">
 
-        <section class="w-full mb-10 md:mb-8">
-            <div class="w-full h-40 md:h-56 lg:h-72 overflow-hidden bg-gray-300 dark:bg-gray-800">
+        <section class="w-full mb-16 md:mb-12">
+            <div class="w-full h-40 md:h-64 overflow-hidden bg-gray-300 dark:bg-gray-800 relative">
                 <img src="<%= productData.information.banner_img %>" alt="Banner" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
             </div>
 
-            <div class="px-4 max-w-4xl mx-auto flex items-end gap-4 -mt-12 relative z-10">
+            <div class="px-4 max-w-4xl mx-auto flex items-end gap-5 -mt-12 relative z-10">
 
                 <div
-                    class="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-4 border-gray-50 dark:border-gray-950 shadow-lg shrink-0 bg-gray-50 dark:bg-gray-950">
+                    class="w-24 h-24 md:w-32 md:h-32 rounded-3xl overflow-hidden border-4 border-white dark:border-gray-950 shadow-xl shrink-0 bg-white dark:bg-gray-950 ring-1 ring-gray-100 dark:ring-gray-800">
                     <img src="<%= productData.information.app_img %>" alt="App Icon" class="w-full h-full object-cover">
                 </div>
 
-                <div class="flex flex-col justify-end pb-1 md:pb-2 translate-y-4 md:translate-y-0">
+                <div class="flex flex-col justify-end pb-1 md:pb-4 translate-y-4 md:translate-y-4 flex-1 min-w-0">
                     <h1
-                        class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-1 leading-tight drop-shadow-sm md:drop-shadow-none">
+                        class="text-2xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-1 leading-tight drop-shadow-none md:drop-shadow-sm tracking-tight truncate">
                         <%= productData.information.brand %>
                     </h1>
 
                     <% if (productData.information.additions && productData.information.additions.logo) { %>
                         <div
-                            class="flex items-center gap-2 text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">
+                            class="flex items-center gap-2 text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm px-0 md:px-3 py-1 rounded-full w-fit">
                             <img src="<%= productData.information.additions.logo %>" alt="icon"
                                 class="w-4 h-4 object-contain">
                             <span>
@@ -32,29 +33,29 @@
                         </div>
                         <% } %>
                 </div>
-
             </div>
         </section>
 
-        <div class="px-4 max-w-4xl mx-auto space-y-8">
-
+        <div class="px-4 max-w-4xl mx-auto space-y-8 pt-6 md:pt-0">
             <section
-                class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                class="bg-white dark:bg-gray-900 p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h2 class="text-lg font-bold mb-6 flex items-center gap-3">
                     <span
-                        class="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                        class="bg-blue-600 text-white w-8 h-8 rounded-xl flex items-center justify-center text-sm font-bold shadow-blue-500/30 shadow-lg">1</span>
                     Masukan Data Akun
                 </h2>
 
-                <div class="grid <%= productData.required_form.length === 1 ? 'grid-cols-1' : 'grid-cols-2' %> gap-4">
+                <div
+                    class="grid <%= productData.required_form.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2' %> gap-6">
                     <% productData.required_form.forEach((label, index)=> { %>
-                        <div
-                            class="<%= productData.required_form.length === 1 ? 'w-full md:w-[90%] md:mx-auto' : 'w-full' %>">
-                            <label class="block text-sm font-medium mb-1 text-gray-500 dark:text-gray-400 capitalize">
+                        <div class="<%= productData.required_form.length === 1 ? 'w-full md:w-[70%]' : 'w-full' %>">
+                            <label
+                                class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
                                 <%= label %>
                             </label>
                             <input type="text"
-                                class="form-input w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder-gray-400 dark:placeholder-gray-600"
+                                class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-400 dark:placeholder-gray-600 text-sm font-medium"
                                 placeholder="Masukan <%= label %>..."
                                 oninput="updateOrderData('form<%= index + 1 %>', this.value)">
                         </div>
@@ -63,35 +64,42 @@
             </section>
 
             <section
-                class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                class="bg-white dark:bg-gray-900 p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h2 class="text-lg font-bold mb-6 flex items-center gap-3">
                     <span
-                        class="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                        class="bg-blue-600 text-white w-8 h-8 rounded-xl flex items-center justify-center text-sm font-bold shadow-blue-500/30 shadow-lg">2</span>
                     Pilih Nominal
                 </h2>
+
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     <% productData.product.forEach((item)=> { %>
-                        <div class="product-card group relative cursor-pointer bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 rounded-xl p-4 transition-all duration-200"
+                        <div class="product-card group relative cursor-pointer bg-gray-50 dark:bg-gray-800 border-2 border-transparent hover:border-blue-400 dark:hover:border-blue-500 rounded-2xl p-4 transition-all duration-200 flex flex-col justify-between"
                             onclick="selectProduct(this, '<%= item.name %>', <%= item.price %>)">
-                            <div class="flex flex-col h-full justify-between">
+
+                            <div class="flex flex-col">
                                 <span
-                                    class="text-sm font-semibold text-gray-700 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                                    class="text-sm font-bold text-gray-700 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 leading-tight">
                                     <%= item.name %>
                                 </span>
-                                <div class="flex items-center gap-2 mt-3">
-                                    <svg class="w-5 h-5 text-blue-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                        <path
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" />
-                                    </svg>
-                                    <span class="text-sm text-gray-500 dark:text-gray-400 font-mono">Rp <%=
-                                            item.price.toLocaleString('id-ID') %></span>
-                                </div>
                             </div>
-                            <div class="absolute top-2 right-2 opacity-0 check-icon text-blue-500">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7"></path>
-                                </svg>
+
+                            <div
+                                class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Harga</span>
+                                <span class="text-sm font-bold text-blue-600 dark:text-blue-400">
+                                    Rp <%= item.price.toLocaleString('id-ID') %>
+                                </span>
+                            </div>
+
+                            <div
+                                class="absolute -top-2 -right-2 opacity-0 check-icon scale-50 transition-all duration-300">
+                                <div class="bg-blue-600 text-white rounded-full p-1 shadow-md">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                         <% }) %>
@@ -99,34 +107,43 @@
             </section>
 
             <section id="payment-section"
-                class="hidden bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 transition-all duration-500 ease-in-out">
-                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                class="hidden bg-white dark:bg-gray-900 p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 relative overflow-hidden transition-all duration-500 ease-in-out">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h2 class="text-lg font-bold mb-6 flex items-center gap-3">
                     <span
-                        class="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
+                        class="bg-blue-600 text-white w-8 h-8 rounded-xl flex items-center justify-center text-sm font-bold shadow-blue-500/30 shadow-lg">3</span>
                     Pilih Pembayaran
                 </h2>
-                <div class="flex flex-col gap-4">
 
-                    <% if(productData.payment_admin.rekomendasi) { %>
+                <div class="flex flex-col gap-6">
+                    <% if(productData.payment_admin && productData.payment_admin.rekomendasi) { %>
                         <% const rekData=productData.payment_admin.rekomendasi; %>
                             <% Object.keys(rekData).forEach(key=> { %>
-                                <div class="payment-card cursor-pointer relative bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 hover:border-blue-500 rounded-xl p-4 w-[95%] mx-auto transition-all"
+                                <div class="payment-card cursor-pointer relative bg-gradient-to-br from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 border-2 border-blue-200 dark:border-blue-900/50 hover:border-blue-500 dark:hover:border-blue-500 rounded-2xl overflow-hidden w-full transition-all group"
                                     data-admin="<%= rekData[key].admin %>"
                                     data-name="<%= key.toUpperCase() %> (Rekomendasi)" onclick="selectPayment(this)">
+
                                     <div
-                                        class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] px-2 py-1 rounded-bl-lg rounded-tr-lg font-bold tracking-wider">
-                                        REKOMENDASI</div>
-                                    <div class="flex flex-col items-start gap-2">
-                                        <span class="font-bold text-gray-800 dark:text-gray-100 uppercase">
-                                            <%= key %>
-                                        </span>
-                                        <div class="h-8 w-auto fill-current text-gray-700 dark:text-gray-300">
-                                            <%- rekData[key].svg %>
-                                        </div>
-                                        <div
-                                            class="w-full text-center mt-2 border-t border-gray-200 dark:border-gray-700 pt-2">
+                                        class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] px-3 py-1 rounded-bl-xl font-bold tracking-wider shadow-sm z-10">
+                                        REKOMENDASI
+                                    </div>
+
+                                    <div class="p-4 flex items-center justify-between gap-3">
+                                        <div class="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
+                                            <div
+                                                class="h-10 w-12 md:h-12 md:w-16 flex-shrink-0 flex items-center justify-center bg-white dark:bg-gray-800 rounded-lg shadow-sm p-1 [&>svg]:w-full [&>svg]:h-full [&>svg]:object-contain">
+                                                <%- rekData[key].svg %>
+                                            </div>
                                             <span
-                                                class="price-display text-lg font-bold text-blue-600 dark:text-blue-400">Rp
+                                                class="font-bold text-gray-800 dark:text-gray-100 uppercase text-xs md:text-sm truncate">
+                                                <%= key.replace('_', ' ' ) %>
+                                            </span>
+                                        </div>
+
+                                        <div class="text-right flex-shrink-0 pl-2">
+                                            <div class="text-[10px] text-gray-500 dark:text-gray-400">Total</div>
+                                            <span
+                                                class="price-display text-sm md:text-lg font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">Rp
                                                 -</span>
                                         </div>
                                     </div>
@@ -134,109 +151,135 @@
                                 <% }) %>
                                     <% } %>
 
-                                        <% Object.keys(productData.payment_admin).forEach(category=> { %>
-                                            <% if (category !=='rekomendasi' ) { %>
-                                                <div
-                                                    class="w-[95%] mx-auto bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-                                                    <div class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
-                                                        onclick="toggleAccordion('<%= category %>')">
-                                                        <div>
-                                                            <h3
-                                                                class="font-bold text-gray-800 dark:text-gray-100 capitalize">
-                                                                <%= category.replace('_', ' ' ) %>
-                                                            </h3>
-                                                            <div class="flex gap-2 mt-1 opacity-60">
+                                        <% if(productData.payment_admin) { %>
+                                            <% Object.keys(productData.payment_admin).forEach(category=> { %>
+                                                <% if (category !=='rekomendasi' ) { %>
+                                                    <div
+                                                        class="w-full bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                                                        <div class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
+                                                            onclick="toggleAccordion('<%= category %>')">
+                                                            <div class="flex-1 min-w-0">
+                                                                <h3
+                                                                    class="font-bold text-gray-800 dark:text-gray-100 capitalize text-sm">
+                                                                    <%= category.replace('_', ' ' ) %>
+                                                                </h3>
+                                                                <div class="flex gap-2 mt-2 opacity-60">
+                                                                    <% Object.keys(productData.payment_admin[category]).slice(0,
+                                                                        5).forEach(method=> { %>
+                                                                        <div
+                                                                            class="h-4 w-6 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full [&>svg]:object-contain text-gray-600 dark:text-gray-400">
+                                                                            <%- productData.payment_admin[category][method].svg
+                                                                                %>
+                                                                        </div>
+                                                                        <% }) %>
+                                                                </div>
+                                                            </div>
+                                                            <button id="btn-arrow-<%= category %>"
+                                                                class="flex-shrink-0 ml-2 transform transition-transform duration-300 text-gray-400 bg-white dark:bg-gray-900 rounded-full p-1 border border-gray-200 dark:border-gray-700">
+                                                                <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+
+                                                        <div id="content-<%= category %>"
+                                                            class="hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
+                                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                                 <%
                                                                     Object.keys(productData.payment_admin[category]).forEach(method=>
                                                                     { %>
-                                                                    <div class="h-4 w-4 overflow-hidden"><%-
-                                                                            productData.payment_admin[category][method].svg
-                                                                            %></div>
+                                                                    <div class="payment-card cursor-pointer bg-gray-50 dark:bg-gray-800 border-2 border-transparent hover:border-blue-500 rounded-xl p-3 transition-all flex items-center justify-between gap-3"
+                                                                        data-admin="<%= productData.payment_admin[category][method].admin %>"
+                                                                        data-name="<%= method.toUpperCase() %>"
+                                                                        onclick="selectPayment(this)">
+
+                                                                        <div
+                                                                            class="flex items-center gap-3 flex-1 min-w-0">
+                                                                            <div
+                                                                                class="h-6 w-8 flex-shrink-0 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full [&>svg]:object-contain">
+                                                                                <%- productData.payment_admin[category][method].svg
+                                                                                    %>
+                                                                            </div>
+                                                                            <span
+                                                                                class="text-xs font-bold uppercase text-gray-600 dark:text-gray-300 truncate">
+                                                                                <%= method.replace('_', ' ' ) %>
+                                                                            </span>
+                                                                        </div>
+
+                                                                        <span
+                                                                            class="price-display text-xs font-bold text-gray-900 dark:text-white flex-shrink-0 whitespace-nowrap">Rp
+                                                                            -</span>
+                                                                    </div>
                                                                     <% }) %>
                                                             </div>
                                                         </div>
-                                                        <button id="btn-arrow-<%= category %>"
-                                                            class="transform transition-transform duration-300 text-gray-500">
-                                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                                                viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                                            </svg>
-                                                        </button>
                                                     </div>
-
-                                                    <div id="content-<%= category %>"
-                                                        class="hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
-                                                        <div class="grid grid-cols-2 gap-3">
-                                                            <%
-                                                                Object.keys(productData.payment_admin[category]).forEach(method=>
-                                                                { %>
-                                                                <div class="payment-card cursor-pointer bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-500 rounded-lg p-3 transition-all flex flex-col items-center justify-center gap-2 text-center"
-                                                                    data-admin="<%= productData.payment_admin[category][method].admin %>"
-                                                                    data-name="<%= method.toUpperCase() %>"
-                                                                    onclick="selectPayment(this)">
-                                                                    <span
-                                                                        class="text-xs font-bold uppercase text-gray-600 dark:text-gray-400">
-                                                                        <%= method %>
-                                                                    </span>
-                                                                    <div class="h-6 w-auto"><%-
-                                                                            productData.payment_admin[category][method].svg
-                                                                            %></div>
-                                                                    <span
-                                                                        class="price-display text-sm font-semibold text-gray-800 dark:text-gray-200">Rp
-                                                                        -</span>
-                                                                </div>
-                                                                <% }) %>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <% } %>
-                                                    <% }) %>
-
+                                                    <% } %>
+                                                        <% }) %>
+                                                            <% } %>
                 </div>
             </section>
 
             <section
-                class="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                class="bg-white dark:bg-gray-900 p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                <h2 class="text-lg font-bold mb-6 flex items-center gap-3">
                     <span
-                        class="bg-blue-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">4</span>
+                        class="bg-blue-600 text-white w-8 h-8 rounded-xl flex items-center justify-center text-sm font-bold shadow-blue-500/30 shadow-lg">4</span>
                     Detail Kontak
                 </h2>
                 <div class="space-y-3">
-                    <label class="block text-sm font-bold text-gray-700 dark:text-gray-300">No. WhatsApp</label>
-                    <input type="number"
-                        class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder-gray-400 dark:placeholder-gray-600"
-                        placeholder="08xxxxxxxxxx" oninput="updateOrderData('contact', this.value)">
-                    <p class="text-xs text-gray-500 dark:text-gray-500">Bukti pembayaran dan status pesanan akan dikirim
-                        ke nomor ini.</p>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">No.
+                        WhatsApp</label>
+                    <div class="relative">
+                        <input type="number"
+                            class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl pl-4 pr-10 py-3.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-400 dark:placeholder-gray-600 font-medium"
+                            placeholder="08xxxxxxxxxx" oninput="updateOrderData('contact', this.value)">
+                        <div class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </section>
 
         </div>
 
         <div id="sticky-bar"
-            class="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] transform translate-y-full transition-transform duration-300 z-50">
+            class="fixed bottom-0 left-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800 p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transform translate-y-full transition-transform duration-300 z-50">
             <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-4 flex-1 min-w-0">
                     <div
-                        class="hidden md:block p-2 bg-blue-100 dark:bg-blue-900 rounded-lg text-blue-600 dark:text-blue-300">
+                        class="hidden md:flex p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400 flex-shrink-0">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" />
+                                d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
                         </svg>
                     </div>
-                    <div class="flex flex-col">
+
+                    <div class="flex flex-col min-w-0">
                         <span id="summary-product"
-                            class="text-sm text-gray-500 dark:text-gray-400 font-medium truncate max-w-[150px]">Pilih
-                            Item</span>
-                        <span id="summary-price" class="text-lg font-bold text-blue-600 dark:text-blue-400">Rp 0</span>
+                            class="text-xs font-semibold text-gray-500 dark:text-gray-400 truncate uppercase tracking-wide">
+                            Pilih Item
+                        </span>
+                        <span id="summary-price" class="text-xl font-extrabold text-gray-900 dark:text-white truncate">
+                            Rp 0
+                        </span>
                     </div>
                 </div>
 
                 <button onclick="triggerCreateInvoice()"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-500/30 transition-all active:scale-95 text-sm md:text-base">
-                    Pesan Sekarang
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 md:px-8 rounded-xl shadow-lg shadow-blue-600/30 transition-all active:scale-95 text-sm md:text-base flex items-center gap-2 flex-shrink-0">
+                    <span>Pesan</span>
+                    <svg class="w-4 h-4 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -244,46 +287,52 @@
     </main>
 
     <script>
+        // State Management
         let orderData = {
             product: null,
             price: 0,
             payment: null,
             payment_amount: 0,
             contact: null,
-            // form1, form2 will be added dynamically
         };
 
-        // Mengambil jumlah form dari panjang array
         const requiredFormsCount = <%= productData.required_form.length %>;
         let currentBasePrice = 0;
         let currentAdminFee = 0;
 
+        // Helper: Update Data & Validasi
         function updateOrderData(key, value) {
             orderData[key] = value;
             checkValidation();
         }
 
+        // Logic 1: Pilih Produk
         function selectProduct(el, name, price) {
-            // 1. Highlight Product
+            // Reset Visual Card
             document.querySelectorAll('.product-card').forEach(card => {
-                card.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
-                card.classList.add('border-gray-200', 'dark:border-gray-700');
-                card.querySelector('.check-icon').style.opacity = '0';
+                card.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20', 'ring-1', 'ring-blue-500');
+                card.classList.add('border-transparent');
+                card.querySelector('.check-icon').classList.remove('opacity-100', 'scale-100');
+                card.querySelector('.check-icon').classList.add('opacity-0', 'scale-50');
             });
 
-            el.classList.remove('border-gray-200', 'dark:border-gray-700');
-            el.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
-            el.querySelector('.check-icon').style.opacity = '1';
+            // Set Active Visual
+            el.classList.remove('border-transparent');
+            el.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20', 'ring-1', 'ring-blue-500');
+            el.querySelector('.check-icon').classList.remove('opacity-0', 'scale-50');
+            el.querySelector('.check-icon').classList.add('opacity-100', 'scale-100');
 
-            // 2. Logic Update
+            // Update State
             orderData.product = name;
             orderData.price = price;
             currentBasePrice = price;
 
-            // 3. Modifikasi: Tampilkan Section Payment
+            // Buka Bagian Pembayaran
             const paymentSection = document.getElementById('payment-section');
             paymentSection.classList.remove('hidden');
-            // Scroll halus ke payment section (optional UX improvement)
+
+            // TAMBAHAN FITUR: Auto Scroll ke Payment Section
+            // Menggunakan timeout kecil agar transisi 'hidden' -> 'block' dirender dulu oleh browser
             setTimeout(() => {
                 paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 100);
@@ -293,6 +342,7 @@
             checkValidation();
         }
 
+        // Logic 2: Accordion Pembayaran
         function toggleAccordion(category) {
             const content = document.getElementById(`content-${category}`);
             const arrow = document.getElementById(`btn-arrow-${category}`);
@@ -306,16 +356,25 @@
             }
         }
 
+        // Logic 3: Pilih Pembayaran
         function selectPayment(el) {
-            // Reset Style
+            // Reset Visual Payment Card
             document.querySelectorAll('.payment-card').forEach(card => {
-                card.classList.remove('border-blue-600', 'ring-2', 'ring-blue-400');
+                card.classList.remove('border-blue-500', 'ring-2', 'ring-blue-400', 'bg-blue-50', 'dark:bg-blue-900/30');
+                if (!card.classList.contains('bg-gradient-to-br')) { // Jangan reset background rekomendasi
+                    card.classList.add('border-transparent');
+                }
             });
 
-            // Active Style
-            el.classList.add('border-blue-600', 'ring-2', 'ring-blue-400');
+            // Set Active Visual
+            el.classList.remove('border-transparent'); // Hapus border transparan
+            el.classList.add('border-blue-500', 'ring-2', 'ring-blue-400'); // Tambah border aktif
 
-            // Logic
+            if (!el.classList.contains('bg-gradient-to-br')) {
+                el.classList.add('bg-blue-50', 'dark:bg-blue-900/30');
+            }
+
+            // Update State
             const admin = parseInt(el.getAttribute('data-admin'));
             const name = el.getAttribute('data-name');
 
@@ -327,6 +386,7 @@
             checkValidation();
         }
 
+        // Logic 4: Update Harga di Kartu Pembayaran
         function updatePaymentPrices() {
             const cards = document.querySelectorAll('.payment-card');
             cards.forEach(card => {
@@ -340,7 +400,7 @@
                     display.innerText = "Rp -";
                 }
 
-                // Jika kartu ini sedang dipilih, update total orderData juga
+                // Jika kartu ini sedang aktif, update total di state juga
                 if (card.classList.contains('ring-2')) {
                     orderData.payment_amount = total;
                     updateSummary();
@@ -348,6 +408,7 @@
             });
         }
 
+        // Logic 5: Update Sticky Bar Footer
         function updateSummary() {
             const sumProduct = document.getElementById('summary-product');
             const sumPrice = document.getElementById('summary-price');
@@ -361,26 +422,26 @@
             }
         }
 
+        // Logic 6: Validasi Akhir
         function checkValidation() {
             let formsFilled = true;
             for (let i = 1; i <= requiredFormsCount; i++) {
-                if (!orderData['form' + i] || orderData['form' + i] === '') formsFilled = false;
+                if (!orderData['form' + i] || orderData['form' + i].trim() === '') formsFilled = false;
             }
 
-            if (orderData.product && orderData.payment && orderData.contact && formsFilled) {
+            const isContactFilled = orderData.contact && orderData.contact.length >= 10;
+
+            if (orderData.product && orderData.payment && isContactFilled && formsFilled) {
                 document.getElementById('sticky-bar').classList.remove('translate-y-full');
             } else {
                 document.getElementById('sticky-bar').classList.add('translate-y-full');
             }
         }
 
+        // Logic 7: Submit Order
         async function triggerCreateInvoice() {
-            await createInvoice(orderData);
-        }
-
-        async function createInvoice(data) {
-            console.log("Order Data:", data);
-            alert("Cek Console untuk data JSON");
+            console.log("Mengirim Data Pesanan:", orderData);
+            alert("Pesanan dikirim! Cek console browser untuk melihat data JSON.");
         }
     </script>
 

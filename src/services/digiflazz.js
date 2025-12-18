@@ -27,8 +27,8 @@ async function getProductList(product, required_form) {
         },
 
         required_form: [
-            "username",
-            "id"
+            "ID Game",
+            "Server Game"
         ],
 
         payment_admin: {
@@ -46,7 +46,49 @@ async function getProductList(product, required_form) {
             ewallet: {
                 dana: {
                     admin: "1000",
-                    svg: "<svg></svg>"
+                    svg: `<svg
+  width="64"
+  height="64"
+  viewBox="0 0 64 64"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Background -->
+  <circle cx="32" cy="32" r="32" fill="#00AED6"/>
+
+  <!-- Wallet shape -->
+  <path
+    d="M18 24
+       H40
+       C44 24 46 26 46 30
+       V36
+       C46 40 44 42 40 42
+       H18
+       C15 42 14 40 14 38
+       V28
+       C14 26 15 24 18 24
+       Z"
+    fill="white"
+  />
+
+  <!-- Wallet pocket -->
+  <rect
+    x="34"
+    y="30"
+    width="10"
+    height="8"
+    rx="2"
+    fill="#00AED6"
+  />
+
+  <!-- Button -->
+  <circle
+    cx="38"
+    cy="34"
+    r="1.5"
+    fill="white"
+  />
+</svg>
+`
                 },
                 shopeepay: {
                     admin: "1200",

@@ -82,8 +82,64 @@ async function getProductList(product, required_form) {
             {
                 name: "Produk B",
                 price: 25000
+            },
+
+            {
+                name: "Produk A",
+                price: 10000
+            },
+            {
+                name: "Produk B",
+                price: 25000
+            },
+            {
+                name: "Produk A",
+                price: 10000
+            },
+            {
+                name: "Produk B",
+                price: 25000
+            },
+            {
+                name: "Produk A",
+                price: 10000
+            },
+            {
+                name: "Produk B",
+                price: 25000
+            },
+            {
+                name: "Produk A",
+                price: 10000
+            },
+            {
+                name: "Produk B",
+                price: 25000
+            },
+            {
+                name: "Produk A",
+                price: 10000
+            },
+            {
+                name: "Produk B",
+                price: 25000
+            },
+            {
+                name: "Produk A",
+                price: 10000
+            },
+            {
+                name: "Produk B",
+                price: 25000
+            },
+            {
+                name: "Produk A",
+                price: 10000
+            },
+            {
+                name: "Produk B",
+                price: 25000
             }
-            // dan seterusnya
         ]
     };
 

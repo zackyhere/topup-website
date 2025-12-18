@@ -25,7 +25,8 @@ app.get("/", async (req, res) => {
     const page_title = "Dashboard";
     const config = getConfig;
     const product = await digiFlazz.getProducts();
-    res.render("pages/dashboard", { config, product, page_title });
+    const productData = [];
+    res.render("pages/dashboard", { config, product, page_title, productData });
 });
 
 // Invoice (spesifik - harus sebelum /:product)

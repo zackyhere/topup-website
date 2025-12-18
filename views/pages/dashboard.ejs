@@ -169,5 +169,96 @@
                 sliderWrapper.addEventListener('mouseleave', () => resetAutoSlide());
             }
         });
+
+        const products = [
+    <% product.forEach((item, index) => { %>
+        {
+            produk: "<%= item.produk %>",
+            img: "<%= item.img %>",
+            url: "/product/<%= item.produk.toLowerCase().replace(/\s/g, '') %>"
+        } <%= index < product.length - 1 ? ',' : '' %>
+    <% }); %>
+];
+
+        // Inisialisasi search untuk dashboard
+        function initDashboardSearch() {
+            const searchInput = document.getElementById('search-input');
+            const searchResults = document.getElementById('search-results');
+
+            if (!searchInput || !searchResults) return;
+
+            // Event listener untuk input
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value;
+
+                if (!query || query.trim() === '') {
+                    searchResults.classList.add('hidden');
+                    return;
+                }
+
+                const normalizedQuery = query.toLowerCase().trim();
+                const filtered = products.filter(item =>
+                    item.produk.toLowerCase().includes(normalizedQuery)
+                );
+
+                displayDashboardResults(filtered, query, searchResults);
+            });
+
+            // Tutup dropdown saat klik di luar
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.classList.add('hidden');
+                }
+            });
+
+            // Buka kembali hasil jika input sudah ada value
+            searchInput.addEventListener('focus', (e) => {
+                if (e.target.value.trim() !== '') {
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+            });
+
+            // Tutup dropdown saat tekan ESC
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    searchResults.classList.add('hidden');
+                    searchInput.blur();
+                }
+            });
+        }
+
+        function displayDashboardResults(results, query, container) {
+            if (results.length === 0) {
+                container.innerHTML = `
+            <div class="p-4 text-center text-gray-500 dark:text-gray-400 text-sm">
+                Tidak ada hasil untuk "<span class="font-semibold">${escapeHtml(query)}</span>"
+            </div>
+        `;
+                container.classList.remove('hidden');
+                return;
+            }
+
+            const resultsHTML = results.map(item => `
+        <a href="${item.url}" 
+            class="flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+            <img src="${item.img}" 
+                alt="${escapeHtml(item.produk)}"
+                class="w-12 h-12 object-cover rounded-lg flex-shrink-0">
+            <span class="text-gray-900 dark:text-white font-medium text-sm">${escapeHtml(item.produk)}</span>
+        </a>
+    `).join('');
+
+            container.innerHTML = resultsHTML;
+            container.classList.remove('hidden');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Jalankan saat DOM ready
+        document.addEventListener('DOMContentLoaded', initDashboardSearch);
     </script>
     <%- include("../partials/footer.ejs") %>

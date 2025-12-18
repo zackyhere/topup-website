@@ -27,8 +27,7 @@ async function getProductList(product, required_form) {
         },
 
         required_form: [
-            "ID Game",
-            "Server Game"
+            "ID Game"
         ],
 
         payment_admin: {
@@ -127,59 +126,59 @@ async function getProductList(product, required_form) {
             },
 
             {
-                name: "Produk A",
+                name: "Produk C",
                 price: 10000
             },
             {
-                name: "Produk B",
+                name: "Produk D",
                 price: 25000
             },
             {
-                name: "Produk A",
+                name: "Produk E",
                 price: 10000
             },
             {
-                name: "Produk B",
+                name: "Produk F",
                 price: 25000
             },
             {
-                name: "Produk A",
+                name: "Produk G",
                 price: 10000
             },
             {
-                name: "Produk B",
+                name: "Produk H",
                 price: 25000
             },
             {
-                name: "Produk A",
+                name: "Produk I",
                 price: 10000
             },
             {
-                name: "Produk B",
+                name: "Produk J",
                 price: 25000
             },
             {
-                name: "Produk A",
+                name: "Produk K",
                 price: 10000
             },
             {
-                name: "Produk B",
+                name: "Produk L",
                 price: 25000
             },
             {
-                name: "Produk A",
+                name: "Produk M",
                 price: 10000
             },
             {
-                name: "Produk B",
+                name: "Produk N",
                 price: 25000
             },
             {
-                name: "Produk A",
+                name: "Produk O",
                 price: 10000
             },
             {
-                name: "Produk B",
+                name: "Produk P",
                 price: 25000
             }
         ]

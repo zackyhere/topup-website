@@ -1,12 +1,11 @@
-require("dotenv").config();
 const express = require("express");
 const path = require("path");
+require('dotenv').config({ path: './config/.env' });
 const digiFlazz = require("./src/services/digiflazz");
 
 const app = express();
 
-const getConfig = require("./config.json");
-
+const getConfig = require("./config/config.js");
 
 // Set EJS
 app.set("view engine", "ejs");

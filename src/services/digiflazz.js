@@ -14,7 +14,6 @@ async function getProducts() {
 }
 
 async function getProductList(product, required_form) {
-    // dummy response
     const dummyResponse = {
         information: {
             banner_img: "https://akmweb.youngjoygame.com/web/gms/image/694619ac9a3170bdeb9bc672ee1f8fc2.jpg",
@@ -124,7 +123,6 @@ async function getProductList(product, required_form) {
                 name: "Produk B",
                 price: 25000
             },
-
             {
                 name: "Produk C",
                 price: 10000
@@ -184,9 +182,7 @@ async function getProductList(product, required_form) {
         ]
     };
 
-    // contoh return di API
     return dummyResponse;
-
 }
 
 module.exports = { getProducts, getProductList };

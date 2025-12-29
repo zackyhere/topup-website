@@ -6,6 +6,27 @@ const digiFlazz = require("./src/services/digiflazz");
 const app = express();
 
 const getConfig = require("./config/config.js");
+const getInvoice = require("./database/invoice.json");
+
+function findInvoice(id) {
+    if (typeof id !== "string" && typeof id !== "number") {
+        throw new TypeError("Invalid invoice id")
+    }
+
+    const safeId = String(id).trim()
+    if (!safeId) return null
+
+    if (!Array.isArray(getInvoice)) {
+        throw new TypeError("Invoice storage is invalid")
+    }
+
+    return getInvoice.find(invoice => {
+        return invoice &&
+            Object.prototype.hasOwnProperty.call(invoice, "id") &&
+            String(invoice.id) === safeId
+    }) || null
+}
+
 
 // Set EJS
 app.set("view engine", "ejs");
@@ -33,7 +54,8 @@ app.get("/invoice/:id", (req, res) => {
     const { id } = req.params;
     const page_title = "Invoice";
     const config = getConfig;
-    res.render("pages/invoice", { id, page_title, config });
+    const invoice = findInvoice(id);
+    res.render("pages/invoice", { id, page_title, config, invoice });
 });
 
 // Product (dynamic - catch-all, harus terakhir)

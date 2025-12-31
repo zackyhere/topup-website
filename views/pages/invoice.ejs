@@ -1,67 +1,89 @@
 <%- include('../partials/header') %>
 
     <main
-        class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300 font-sans">
+        class="min-h-screen bg-gray-50 dark:bg-gray-900 py-6 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300 font-sans">
         <div class="max-w-3xl mx-auto">
 
             <% if (!invoice) { %>
                 <div
-                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-10 text-center border border-gray-100 dark:border-gray-700">
+                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 sm:p-10 text-center border border-gray-100 dark:border-gray-700">
                     <div
-                        class="bg-red-100 dark:bg-red-900/30 w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-500" fill="none"
+                        class="bg-red-100 dark:bg-red-900/30 w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 sm:h-10 sm:w-10 text-red-500" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Transaksi Tidak Ditemukan</h2>
-                    <p class="text-gray-500 dark:text-gray-400 mb-8">Maaf, data invoice yang Anda cari tidak tersedia
-                        atau ID salah.</p>
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">Transaksi Tidak
+                        Ditemukan</h2>
+                    <p class="text-sm sm:text-base text-gray-500 dark:text-gray-400 mb-8">Maaf, data invoice yang Anda
+                        cari tidak tersedia atau ID salah.</p>
                     <a href="/"
-                        class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium">
+                        class="inline-block px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm">
                         Kembali ke Beranda
                     </a>
                 </div>
 
                 <% } else { %>
-                    <% let hargaProduk=parseInt(invoice.price); let biayaAdmin=parseInt(invoice.payment_price); let
-                        totalPembayaran=hargaProduk + biayaAdmin; %>
+                    <% /* 1. Kalkulasi Harga */ let hargaProduk=parseInt(invoice.price); let
+                        biayaAdmin=parseInt(invoice.payment_price); let totalPembayaran=hargaProduk + biayaAdmin; /* 2.
+                        Logika Show/Hide Instruksi (Hanya Tampil saat Pending) */ /* Note: Variabel status diganti
+                        transaction_status sesuai request */ let isPending=(invoice.transaction_status==='pending' ); /*
+                        3. Format VA Number (Spasi tiap 4 digit) */ let formattedVA="" ; if (invoice.payment_va_number)
+                        { formattedVA=invoice.payment_va_number.match(/.{1,4}/g).join(' ');
+         }
+
+         /* 4. Helper Fungsi Warna Status */
+         function getStatusStyle(statusVal) {
+            statusVal = statusVal.toLowerCase();
+            if (statusVal === 'sukses') { return { label: 'Sukses' ,
+                        classes: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800'
+                        }; } else if (statusVal==='gagal' ) { return { label: 'Gagal' ,
+                        classes: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800'
+                        }; } else { return { label: 'Pending' ,
+                        classes: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-800'
+                        }; } } let paymentStyle=getStatusStyle(invoice.payment_status); let
+                        transStyle=getStatusStyle(invoice.transaction_status); %>
 
                         <div
                             class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700 transition-colors duration-300">
 
-                            <div class="bg-blue-600 p-6 sm:p-8 text-white relative overflow-hidden">
+                            <div class="bg-blue-600 p-5 sm:p-8 text-white relative overflow-hidden">
                                 <div
-                                    class="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 rounded-full bg-white opacity-10 blur-2xl">
+                                    class="absolute top-0 right-0 -mr-10 -mt-10 w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-white opacity-10 blur-2xl">
                                 </div>
 
                                 <div
                                     class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
-                                    <div>
-                                        <p class="text-blue-100 text-sm font-medium uppercase tracking-wider mb-1">
+                                    <div class="w-full sm:w-auto">
+                                        <p
+                                            class="text-blue-100 text-xs sm:text-sm font-medium uppercase tracking-wider mb-1">
                                             Invoice ID</p>
-                                        <h1 class="text-3xl font-bold flex items-center gap-2">
-                                            <%= invoice.id %>
-                                                <button onclick="copyText('<%= invoice.id %>', 'btn-copy-id')"
-                                                    id="btn-copy-id"
-                                                    class="text-blue-200 hover:text-white transition-colors cursor-pointer"
-                                                    title="Salin ID">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                                    </svg>
-                                                </button>
-                                        </h1>
+                                        <div class="flex items-center justify-between sm:justify-start gap-3">
+                                            <h1 class="text-2xl sm:text-3xl font-bold truncate">
+                                                <%= invoice.id %>
+                                            </h1>
+                                            <button onclick="copyText('<%= invoice.id %>', 'btn-copy-id')"
+                                                id="btn-copy-id"
+                                                class="text-blue-200 hover:text-white transition-colors cursor-pointer p-1 rounded-md hover:bg-blue-500/20"
+                                                title="Salin ID">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
 
-                                    <% if(invoice.payment_status !=='paid' && invoice.status !=='failed' ) { %>
-                                        <div class="text-right">
-                                            <p class="text-blue-100 text-xs mb-1">Sisa Waktu Pembayaran</p>
+                                    <% if(isPending) { %>
+                                        <div
+                                            class="w-full sm:w-auto text-left sm:text-right mt-2 sm:mt-0 bg-blue-700/30 sm:bg-transparent p-3 sm:p-0 rounded-lg">
+                                            <p class="text-blue-100 text-xs mb-1">Batas Waktu Pembayaran</p>
                                             <div id="countdown-timer"
-                                                class="text-xl font-mono font-bold bg-blue-700/50 px-3 py-1 rounded-lg border border-blue-400/30 inline-block">
+                                                class="text-lg sm:text-xl font-mono font-bold bg-blue-700/50 sm:px-3 sm:py-1 rounded-lg sm:border border-blue-400/30 inline-block text-white">
                                                 --:--:--
                                             </div>
                                         </div>
@@ -69,77 +91,61 @@
                                 </div>
                             </div>
 
-                            <div class="p-6 sm:p-10 space-y-8">
+                            <div class="p-5 sm:p-10 space-y-6 sm:space-y-8">
 
                                 <div>
                                     <h3
-                                        class="text-xl font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                                        class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
                                         Status</h3>
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
 
-                                        <% let payLabel=invoice.payment_status; let
-                                            payColor='bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300' ;
-                                            if (invoice.payment_status=='sukses' ) { payLabel='Lunas' ;
-                                            payColor='bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800'
-                                            ; } else if (invoice.payment_status=='gagal' ) { payLabel='Gagal' ;
-                                            payColor='bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800'
-                                            ; } else { payLabel='Belum Dibayar' ;
-                                            payColor='bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-800'
-                                            ; } %>
-                                            <div
-                                                class="p-4 rounded-xl <%= payColor %> flex items-center justify-between">
-                                                <span class="text-sm font-semibold opacity-80">Status Pembayaran</span>
-                                                <span class="font-bold uppercase tracking-wide">
-                                                    <%= payLabel %>
-                                                </span>
-                                            </div>
+                                        <div
+                                            class="p-3 sm:p-4 rounded-xl <%= paymentStyle.classes %> flex items-center justify-between shadow-sm">
+                                            <span class="text-xs sm:text-sm font-semibold opacity-80">Pembayaran</span>
+                                            <span class="text-sm sm:text-base font-bold uppercase tracking-wide">
+                                                <%= paymentStyle.label %>
+                                            </span>
+                                        </div>
 
-                                            <% let transLabel=invoice.transaction_status; let
-                                                transColor='bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-                                                ; if (invoice.transaction_status=='sukses' ) { transLabel='Sukses' ;
-                                                transColor='bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800'
-                                                ; } else if (invoice.transaction_status=='gagal' ) { transLabel='Gagal'
-                                                ;
-                                                transColor='bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800'
-                                                ; } else { transLabel='Pending' ;
-                                                transColor='bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800'
-                                                ; } %>
-                                                <div
-                                                    class="p-4 rounded-xl <%= transColor %> flex items-center justify-between">
-                                                    <span class="text-sm font-semibold opacity-80">Status
-                                                        Transaksi</span>
-                                                    <span class="font-bold uppercase tracking-wide">
-                                                        <%= transLabel %>
-                                                    </span>
-                                                </div>
+                                        <div
+                                            class="p-3 sm:p-4 rounded-xl <%= transStyle.classes %> flex items-center justify-between shadow-sm">
+                                            <span class="text-xs sm:text-sm font-semibold opacity-80">Transaksi</span>
+                                            <span class="text-sm sm:text-base font-bold uppercase tracking-wide">
+                                                <%= transStyle.label %>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
 
-                                    <div class="space-y-4">
+                                    <div
+                                        class="space-y-4 bg-gray-50 dark:bg-gray-800/50 sm:bg-transparent p-4 sm:p-0 rounded-xl sm:rounded-none">
                                         <h3
-                                            class="text-lg font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+                                            class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 mb-3">
                                             Detail Produk</h3>
 
-                                        <div>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Item</p>
-                                            <p class="font-medium text-gray-800 dark:text-gray-200">
+                                        <div class="flex justify-between items-start gap-4">
+                                            <span class="text-sm text-gray-500 dark:text-gray-400 shrink-0">Item</span>
+                                            <span
+                                                class="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200 text-right leading-tight">
                                                 <%= invoice.product %>
-                                            </p>
+                                            </span>
                                         </div>
 
                                         <div>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Data Akun</p>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Data Akun</p>
                                             <div
-                                                class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 border border-gray-200 dark:border-gray-600 space-y-1">
+                                                class="bg-white dark:bg-gray-700/50 rounded-lg p-3 border border-gray-200 dark:border-gray-600 space-y-2">
                                                 <% for (let key in invoice.customer_number) { %>
-                                                    <div class="flex justify-between text-sm">
-                                                        <span class="text-gray-500 dark:text-gray-400 capitalize">
+                                                    <div
+                                                        class="flex flex-col sm:flex-row justify-between text-sm gap-1 sm:gap-0">
+                                                        <span
+                                                            class="text-gray-500 dark:text-gray-400 capitalize text-xs sm:text-sm">
                                                             <%= key %>
                                                         </span>
                                                         <span
-                                                            class="font-mono font-medium text-gray-800 dark:text-gray-200 select-all">
+                                                            class="font-mono font-medium text-gray-800 dark:text-gray-200 select-all text-right break-all sm:break-normal">
                                                             <%= invoice.customer_number[key] %>
                                                         </span>
                                                     </div>
@@ -147,58 +153,65 @@
                                             </div>
                                         </div>
 
-                                        <div>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">Nomor WhatsApp</p>
-                                            <p class="font-medium text-gray-800 dark:text-gray-200">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm text-gray-500 dark:text-gray-400">WhatsApp</span>
+                                            <span
+                                                class="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200">
                                                 <%= invoice.wa_number %>
-                                            </p>
+                                            </span>
                                         </div>
                                     </div>
 
-                                    <div class="space-y-4">
+                                    <div
+                                        class="space-y-4 bg-gray-50 dark:bg-gray-800/50 sm:bg-transparent p-4 sm:p-0 rounded-xl sm:rounded-none">
                                         <h3
-                                            class="text-lg font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+                                            class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 mb-3">
                                             Rincian Biaya</h3>
 
-                                        <div class="flex justify-between">
+                                        <div class="flex justify-between items-center">
                                             <span class="text-sm text-gray-500 dark:text-gray-400">Metode</span>
-                                            <span class="font-bold text-gray-800 dark:text-gray-200 uppercase">
+                                            <span
+                                                class="text-sm sm:text-base font-bold text-gray-800 dark:text-gray-200 uppercase bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded">
                                                 <%= invoice.payment_method %>
                                             </span>
                                         </div>
 
-                                        <div class="flex justify-between">
+                                        <div class="flex justify-between items-center">
                                             <span class="text-sm text-gray-500 dark:text-gray-400">Harga Produk</span>
-                                            <span class="font-medium text-gray-800 dark:text-gray-200">Rp <%=
-                                                    hargaProduk.toLocaleString('id-ID') %></span>
+                                            <span
+                                                class="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200">Rp
+                                                <%= hargaProduk.toLocaleString('id-ID') %>
+                                            </span>
                                         </div>
 
-                                        <div class="flex justify-between">
+                                        <div class="flex justify-between items-center">
                                             <span class="text-sm text-gray-500 dark:text-gray-400">Biaya Admin</span>
-                                            <span class="font-medium text-gray-800 dark:text-gray-200">
+                                            <span
+                                                class="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200">
                                                 Rp <%= biayaAdmin.toLocaleString('id-ID') %>
                                             </span>
                                         </div>
 
-                                        <div class="border-t border-dashed border-gray-300 dark:border-gray-600 pt-3">
-                                            <div class="flex justify-between items-center mb-1">
-                                                <span class="text-sm font-bold text-gray-900 dark:text-white">Total
-                                                    Pembayaran</span>
+                                        <div
+                                            class="border-t border-dashed border-gray-300 dark:border-gray-600 pt-3 mt-2">
+                                            <div class="flex justify-between items-center">
+                                                <span
+                                                    class="text-sm font-bold text-gray-900 dark:text-white">Total</span>
                                                 <div class="flex items-center gap-2">
                                                     <span
-                                                        class="text-2xl font-extrabold text-blue-600 dark:text-blue-400">
+                                                        class="text-lg sm:text-2xl font-extrabold text-blue-600 dark:text-blue-400">
                                                         Rp <%= totalPembayaran.toLocaleString('id-ID') %>
                                                     </span>
                                                     <button
                                                         onclick="copyText('<%= totalPembayaran %>', 'btn-copy-total')"
                                                         id="btn-copy-total"
-                                                        class="p-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-gray-500 hover:text-blue-600 dark:text-gray-300 transition-colors cursor-pointer"
+                                                        class="p-1.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-500 hover:text-blue-600 dark:text-gray-300 transition-colors cursor-pointer shadow-sm"
                                                         title="Salin Nominal">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
                                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                 stroke-width="2"
-                                                                d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 01-2-2V5" />
+                                                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                                         </svg>
                                                     </button>
                                                 </div>
@@ -207,11 +220,109 @@
                                     </div>
 
                                 </div>
+
+                                <% if (isPending && (invoice.payment_qris || invoice.payment_va_number)) { %>
+                                    <div
+                                        class="mt-8 pt-6 sm:pt-8 border-t border-dashed border-gray-300 dark:border-gray-700">
+                                        <h3
+                                            class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                            Instruksi Pembayaran
+                                        </h3>
+
+                                        <div
+                                            class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 sm:p-6 border border-blue-100 dark:border-blue-800">
+
+                                            <% if (invoice.payment_qris) { %>
+                                                <div class="flex flex-col items-center justify-center text-center mb-6">
+                                                    <p
+                                                        class="text-sm text-gray-600 dark:text-gray-400 mb-3 font-medium">
+                                                        Scan QRIS berikut:</p>
+                                                    <div class="bg-white p-2 rounded-xl inline-block shadow-md">
+                                                        <img src="<%= invoice.payment_qris %>" alt="QRIS Code"
+                                                            class="w-48 h-48 sm:w-64 sm:h-64 object-contain">
+                                                    </div>
+                                                </div>
+                                                <% } %>
+
+                                                    <% if (invoice.payment_va_number) { %>
+                                                        <div class="space-y-4">
+
+                                                            <div
+                                                                class="flex flex-col gap-1 pb-3 border-b border-blue-200 dark:border-blue-800/50">
+                                                                <span
+                                                                    class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide">Nomor
+                                                                    Virtual Account</span>
+
+                                                                <div class="flex items-center justify-between gap-3">
+                                                                    <span
+                                                                        class="font-mono font-bold text-gray-800 dark:text-white whitespace-nowrap overflow-x-auto scrollbar-hide text-base sm:text-2xl tracking-tight sm:tracking-normal w-full">
+                                                                        <%= formattedVA %>
+                                                                    </span>
+
+                                                                    <button
+                                                                        onclick="copyText('<%= invoice.payment_va_number %>', 'btn-copy-va')"
+                                                                        id="btn-copy-va"
+                                                                        class="shrink-0 p-2 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-blue-600 dark:text-blue-400 transition-colors shadow-sm cursor-pointer border border-blue-100 dark:border-blue-800"
+                                                                        title="Salin VA">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="h-5 w-5" fill="none"
+                                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                                        </svg>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                            <% if (invoice.payment_va_name) { %>
+                                                                <div class="flex justify-between items-center">
+                                                                    <span
+                                                                        class="text-sm text-gray-500 dark:text-gray-400">Atas
+                                                                        Nama</span>
+                                                                    <span
+                                                                        class="font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide text-sm sm:text-base">
+                                                                        <%= invoice.payment_va_name %>
+                                                                    </span>
+                                                                </div>
+                                                                <% } %>
+
+                                                                    <div
+                                                                        class="mt-4 bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg flex gap-3 items-start border border-yellow-100 dark:border-yellow-800/30">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="h-5 w-5 text-yellow-600 shrink-0 mt-0.5"
+                                                                            fill="none" viewBox="0 0 24 24"
+                                                                            stroke="currentColor">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                        </svg>
+                                                                        <p
+                                                                            class="text-xs text-yellow-700 dark:text-yellow-400 leading-relaxed">
+                                                                            Lakukan pembayaran tepat sesuai nominal.
+                                                                            Transaksi akan diproses otomatis setelah
+                                                                            pembayaran diterima.
+                                                                        </p>
+                                                                    </div>
+
+                                                        </div>
+                                                        <% } %>
+
+                                        </div>
+                                    </div>
+                                    <% } %>
+
                             </div>
 
                             <div
                                 class="bg-gray-50 dark:bg-gray-900/50 p-4 text-center border-t border-gray-100 dark:border-gray-700">
-                                <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">
                                     Simpan bukti invoice ini jika terjadi kendala.
                                 </p>
                             </div>
@@ -241,14 +352,14 @@
             const btn = document.getElementById(btnId);
             if (!btn) return;
             const originalContent = btn.innerHTML;
-            // Ubah icon jadi checkmark
+            // Ubah ikon tombol sementara menjadi checkmark hijau
             btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`;
 
             setTimeout(() => { btn.innerHTML = originalContent; }, 2000);
         }
 
   // Script Countdown Timer
-  <% if (typeof invoice !== 'undefined' && invoice && invoice.payment_status !== 'paid' && invoice.status !== 'failed') { %>
+  <% if (typeof invoice !== 'undefined' && invoice && invoice.transaction_status === 'pending') { %>
             (function () {
                 const expiredTime = new Date("<%= invoice.expired_at %>").getTime();
                 const timerElement = document.getElementById("countdown-timer");
@@ -262,7 +373,7 @@
                         if (timerElement) {
                             timerElement.innerHTML = "EXPIRED";
                             timerElement.classList.add("text-red-500", "bg-red-100", "dark:bg-red-900/30");
-                            timerElement.classList.remove("text-blue-600");
+                            timerElement.classList.remove("text-blue-600", "text-white");
                         }
                         return;
                     }

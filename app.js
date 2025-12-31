@@ -20,12 +20,28 @@ function findInvoice(id) {
         throw new TypeError("Invoice storage is invalid")
     }
 
-    return getInvoice.find(invoice => {
+    const invoice = getInvoice.find(invoice => {
         return invoice &&
             Object.prototype.hasOwnProperty.call(invoice, "id") &&
             String(invoice.id) === safeId
-    }) || null
+    })
+
+    if (!invoice) return null
+
+    // Salin object agar tidak memodifikasi data asli
+    const result = { ...invoice }
+
+    if (typeof result.wa_number === "string") {
+        const len = result.wa_number.length
+        if (len > 2) {
+            const last2 = result.wa_number.slice(-2)
+            result.wa_number = "*".repeat(len - 2) + last2
+        }
+    }
+
+    return result
 }
+
 
 
 // Set EJS

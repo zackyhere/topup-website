@@ -28,7 +28,6 @@ function findInvoice(id) {
 
     if (!invoice) return null
 
-    // Salin object agar tidak memodifikasi data asli
     const result = { ...invoice }
 
     if (typeof result.wa_number === "string") {
@@ -43,20 +42,12 @@ function findInvoice(id) {
 }
 
 
-
-// Set EJS
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
-// Static files (CSS, JS, images)
 app.use(express.static(path.join(__dirname, "public")));
-
-// Ambil request body (opsional)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ROUTES
-// Dashboard
 app.get("/", async (req, res) => {
     const page_title = "Dashboard";
     const config = getConfig;
@@ -65,7 +56,6 @@ app.get("/", async (req, res) => {
     res.render("pages/dashboard", { config, product, page_title, productData });
 });
 
-// Invoice (spesifik - harus sebelum /:product)
 app.get("/invoice/:id", (req, res) => {
     const { id } = req.params;
     const page_title = "Invoice";
@@ -74,7 +64,6 @@ app.get("/invoice/:id", (req, res) => {
     res.render("pages/invoice", { id, page_title, config, invoice });
 });
 
-// Product (dynamic - catch-all, harus terakhir)
 app.get("/product/:product", async (req, res) => {
     const { product } = req.params;
     const page_title = "Product";

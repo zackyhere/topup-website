@@ -1,12 +1,14 @@
 const express = require("express");
 const path = require("path");
 require('dotenv').config({ path: './config/.env' });
-const digiFlazz = require("./src/services/digiflazz");
+const digiFlazzTest = require("./src/services/digiflazz-test.js");
+const digiFlazz = require("./src/services/digiflazz.js");
 
 const app = express();
 
 const getConfig = require("./config/config.js");
 const getInvoice = require("./database/invoice.json");
+const getProducts = require("./database/pricelist.json");
 
 function findInvoice(id) {
     if (typeof id !== "string" && typeof id !== "number") {
@@ -41,6 +43,29 @@ function findInvoice(id) {
     return result
 }
 
+function getMappingProduct(pricelist, brand_img) {
+    const brandImageMap = {};
+    brand_img.forEach(item => {
+        brandImageMap[item.brand] = item.img;
+    });
+
+    // Menggunakan Map untuk menyimpan brand unik
+    const uniqueBrands = new Map();
+
+    pricelist.forEach(item => {
+        // Hanya tambahkan jika brand belum ada di Map
+        if (!uniqueBrands.has(item.brand)) {
+            uniqueBrands.set(item.brand, {
+                img: brandImageMap[item.brand] || "",
+                produk: item.brand
+            });
+        }
+    });
+
+    // Konversi Map values menjadi array
+    return Array.from(uniqueBrands.values());
+}
+
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -51,7 +76,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", async (req, res) => {
     const page_title = "Dashboard";
     const config = getConfig;
-    const product = await digiFlazz.getProducts();
+    const product = getMappingProduct(getProducts, getConfig.digiflazz.brand_img);
     const productData = [];
     res.render("pages/dashboard", { config, product, page_title, productData });
 });

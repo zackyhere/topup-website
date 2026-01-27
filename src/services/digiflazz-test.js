@@ -6,7 +6,7 @@ async function getProducts() {
         { img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhEueMr4xMoaHW5jmpsdqFzSh5Yalm5MpeoQ&s", produk: "product 4", },
         { img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhEueMr4xMoaHW5jmpsdqFzSh5Yalm5MpeoQ&s", produk: "product 5", },
         { img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhEueMr4xMoaHW5jmpsdqFzSh5Yalm5MpeoQ&s", produk: "product 6", },
-        { img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhEueMr4xMoaHW5jmpsdqFzSh5Yalm5MpeoQ&s", produk: "product 7", },
+        { img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhEueMr4xMoaHW5jmpsdqFzSh5Yalm5MpeoQ&s", produk: "product 7777", },
         { img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhEueMr4xMoaHW5jmpsdqFzSh5Yalm5MpeoQ&s", produk: "product 8", },
         { img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhEueMr4xMoaHW5jmpsdqFzSh5Yalm5MpeoQ&s", produk: "product 9", },
         { img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhEueMr4xMoaHW5jmpsdqFzSh5Yalm5MpeoQ&s", produk: "product 10", }

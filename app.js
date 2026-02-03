@@ -62,7 +62,7 @@ function getMappingProduct(pricelist, brand_img) {
         }
     });
 
-    // Konversi Map values menjadi array
+    
     return Array.from(uniqueBrands.values());
 }
 
